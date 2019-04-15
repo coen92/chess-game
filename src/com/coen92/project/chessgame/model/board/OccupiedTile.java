@@ -6,7 +6,7 @@ public class OccupiedTile extends ChessTile {
 
     private final Piece pieceOnTile;
 
-    protected OccupiedTile(final int coordinate, Piece pieceOnTile) {
+    protected OccupiedTile(final int coordinate, final Piece pieceOnTile) {
         super(coordinate);
         this.pieceOnTile = pieceOnTile;
     }

@@ -1,6 +1,7 @@
 package com.coen92.project.chessgame.model.board;
 
 import com.coen92.project.chessgame.model.pieces.Piece;
+import com.coen92.project.chessgame.model.utils.BoardUtils;
 import com.google.common.collect.ImmutableMap;
 
 import java.util.Collections;
@@ -13,7 +14,7 @@ public abstract class ChessTile {
     private static final Map<Integer, EmptyTile> EMPTY_TILES = createAllPossibleEmptyTiles();
 
     //preventing from creation new Tile using Constructor
-    protected ChessTile(int tileCoordinate) {
+    protected ChessTile(final int tileCoordinate) {
         this.tileCoordinate = tileCoordinate;
     }
 
@@ -30,10 +31,9 @@ public abstract class ChessTile {
     }
 
     private static Map<Integer, EmptyTile> createAllPossibleEmptyTiles() {
-
         final Map<Integer, EmptyTile> emptyTileMap = new HashMap<>();
 
-        for(int i=0; i<64; i++) {
+        for(int i = 0; i < BoardUtils.NUMBER_OF_TILES; i++) {
             emptyTileMap.put(i, new EmptyTile(i));
         }
 

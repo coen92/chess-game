@@ -4,7 +4,7 @@ import com.coen92.project.chessgame.model.board.Board;
 import com.coen92.project.chessgame.model.rules.Alliance;
 import com.coen92.project.chessgame.model.rules.Move;
 
-import java.util.List;
+import java.util.Collection;
 
 public abstract class Piece {
 
@@ -24,5 +24,5 @@ public abstract class Piece {
         return pieceAlliance;
     }
 
-    public abstract List<Move> calculateLegalMoves(final Board board);
+    public abstract Collection<Move> calculateLegalMoves(final Board board);
 }
