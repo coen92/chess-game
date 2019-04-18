@@ -31,4 +31,13 @@ public abstract class Move {
             this.attackedPiece = attackedPiece;
         }
     }
+
+    /* -------- THIS CLASS IS TEMPORARY ------ */
+    public static final class UponMove extends Move {
+
+        public UponMove(Board board, Piece movedPiece, int destinationCoordinate) {
+            super(board, movedPiece, destinationCoordinate);
+        }
+    }
+    /* --------------------------------------- */
 }

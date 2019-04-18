@@ -4,7 +4,6 @@ import com.coen92.project.chessgame.model.board.Board;
 import com.coen92.project.chessgame.model.board.ChessTile;
 import com.coen92.project.chessgame.model.rules.Alliance;
 import com.coen92.project.chessgame.model.rules.Move;
-import com.coen92.project.chessgame.model.rules.Move.AttackMove;
 import com.coen92.project.chessgame.model.rules.Move.MajorMove;
 import com.coen92.project.chessgame.model.utils.BoardUtils;
 import com.google.common.collect.ImmutableList;
@@ -13,11 +12,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class Bishop extends Piece {
+import static com.coen92.project.chessgame.model.rules.Move.*;
 
-    private final static int[] CANDIDATE_MOVE_VECTOR_COORDINATES = {-9, -7, 7, 9};
+public class Queen extends Piece {
 
-    protected Bishop(int piecePosition, Alliance pieceAlliance) {
+    private final static int[] CANDIDATE_MOVE_VECTOR_COORDINATES = {-9, -8, -7, -1, 1 , 7, 8, 9};
+
+
+    protected Queen(int piecePosition, Alliance pieceAlliance) {
         super(piecePosition, pieceAlliance);
     }
 
@@ -32,7 +34,7 @@ public class Bishop extends Piece {
             while (BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) {
 
                 if(isFirstColumnExclusion(candidateDestinationCoordinate, candidateCoordinateOffset) ||
-                isEighthColumnExclusion(candidateDestinationCoordinate, candidateCoordinateOffset)) {
+                        isEighthColumnExclusion(candidateDestinationCoordinate, candidateCoordinateOffset)) {
                     break;
                 }
 
@@ -60,9 +62,9 @@ public class Bishop extends Piece {
 
     //edge conditions for Bishop to exclude illegal moves
     private static boolean isFirstColumnExclusion(final int currentPosition, final int candidateOffset) {
-        return BoardUtils.FIRST_COLUMN[currentPosition] && (candidateOffset == -9 || candidateOffset == 7);
+        return BoardUtils.FIRST_COLUMN[currentPosition] && (candidateOffset == -9 || candidateOffset == 7 || candidateOffset == -1);
     }
     private static boolean isEighthColumnExclusion(final int currentPosition, final int candidateOffset) {
-        return BoardUtils.EIGHTH_COLUMN[currentPosition] && (candidateOffset == -7 || candidateOffset == 9);
+        return BoardUtils.EIGHTH_COLUMN[currentPosition] && (candidateOffset == -7 || candidateOffset == 9 || candidateOffset == 1);
     }
 }
