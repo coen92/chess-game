@@ -17,17 +17,17 @@ public class Bishop extends Piece {
 
     private final static int[] CANDIDATE_MOVE_VECTOR_COORDINATES = {-9, -7, 7, 9};
 
-    protected Bishop(int piecePosition, Alliance pieceAlliance) {
+    protected Bishop(final int piecePosition, final Alliance pieceAlliance) {
         super(piecePosition, pieceAlliance);
     }
 
     @Override
     public Collection<Move> calculateLegalMoves(final Board board) {
-        int candidateDestinationCoordinate;
         final List<Move> legalMoves = new ArrayList<>();
 
+        //Todo: change repetable code into external method
         for(final int candidateCoordinateOffset : CANDIDATE_MOVE_VECTOR_COORDINATES) {
-            candidateDestinationCoordinate = this.getPiecePosition();
+            int candidateDestinationCoordinate = this.getPiecePosition();
 
             while (BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) {
 

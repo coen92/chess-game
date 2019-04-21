@@ -24,15 +24,14 @@ public class Knight extends Piece {
 
     @Override
     public Collection<Move> calculateLegalMoves(final Board board) {
-        int candidateDestinationCoordinate;
         final List<Move> legalMoves = new ArrayList<>();
 
         for(final int currentCandidateOffset : CANDIDATE_MOVE_COORDINATES) {
-            candidateDestinationCoordinate = this.getPiecePosition() + currentCandidateOffset;
+            int candidateDestinationCoordinate = this.getPiecePosition() + currentCandidateOffset;
 
             if(BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) {
 
-                //skipping movements in unreachable tiles when Knight is on edge position on Board
+                // skipping movements in unreachable tiles when Knight is on edge position on Board
                 if(isFirstColumnExclusion(this.getPiecePosition(), currentCandidateOffset) ||
                 isSecondColumnExclusion(this.getPiecePosition(), currentCandidateOffset) ||
                 isSeventhColumnExclusion(this.getPiecePosition(), currentCandidateOffset) ||
@@ -48,7 +47,7 @@ public class Knight extends Piece {
                     final Piece pieceAtDestination = candidateDestinationTile.getPiece();
                     final Alliance pieceAtDestinationAlliance = pieceAtDestination.getPieceAlliance();
 
-                    //checking if piece at occupied destination is friendly no weapons or enemy piece
+                    // checking if piece at occupied destination is friendly no weapons or enemy piece
                     if(this.getPieceAlliance() != pieceAtDestinationAlliance) {
                         //if it's an enemy piece we can move there
                         legalMoves.add(new AttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination));
@@ -59,7 +58,7 @@ public class Knight extends Piece {
         return ImmutableList.copyOf(legalMoves);
     }
 
-    //creating edge conditions for different Piece position to avoid Exceptions in movement to unreachable tile
+    // creating edge conditions for different Piece position to avoid Exceptions in movement to unreachable tile
     private static boolean isFirstColumnExclusion(final int currentPosition, final int candidateOffset) {
         return BoardUtils.FIRST_COLUMN[currentPosition] && (candidateOffset == -17 || candidateOffset == -10 || candidateOffset == 6 || candidateOffset == 15);
     }

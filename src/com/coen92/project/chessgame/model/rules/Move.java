@@ -33,6 +33,7 @@ public abstract class Move {
     }
 
     /* -------- THIS CLASS IS TEMPORARY ------ */
+    //Todo: update body of the method for UponMove
     public static final class UponMove extends Move {
 
         public UponMove(Board board, Piece movedPiece, int destinationCoordinate) {

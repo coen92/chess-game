@@ -18,18 +18,17 @@ public class Queen extends Piece {
 
     private final static int[] CANDIDATE_MOVE_VECTOR_COORDINATES = {-9, -8, -7, -1, 1 , 7, 8, 9};
 
-
-    protected Queen(int piecePosition, Alliance pieceAlliance) {
+    protected Queen(final int piecePosition, final Alliance pieceAlliance) {
         super(piecePosition, pieceAlliance);
     }
 
     @Override
     public Collection<Move> calculateLegalMoves(final Board board) {
-        int candidateDestinationCoordinate;
         final List<Move> legalMoves = new ArrayList<>();
 
+        //Todo: change repetable code into external method
         for(final int candidateCoordinateOffset : CANDIDATE_MOVE_VECTOR_COORDINATES) {
-            candidateDestinationCoordinate = this.getPiecePosition();
+            int candidateDestinationCoordinate = this.getPiecePosition();
 
             while (BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) {
 
