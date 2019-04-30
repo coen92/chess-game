@@ -2,13 +2,11 @@ package com.coen92.project.chessgame.model.board;
 
 import com.coen92.project.chessgame.model.pieces.*;
 import com.coen92.project.chessgame.model.rules.Alliance;
+import com.coen92.project.chessgame.model.rules.Move;
 import com.coen92.project.chessgame.model.utils.BoardUtils;
 import com.google.common.collect.ImmutableList;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Board {
 
@@ -20,12 +18,32 @@ public class Board {
         this.gameBoard = createGameBoard(builder);
         this.whitePieces = calculateActivePieces(this.gameBoard, Alliance.WHITE);
         this.blackPieces = calculateActivePieces(this.gameBoard, Alliance.BLACK);
+
+        final Collection<Move> whiteStandardLegalMoves = calculateLegalMoves(this.whitePieces);
+        final Collection<Move> blackStandardLegalMoves = calculateLegalMoves(this.blackPieces);
     }
 
     public ChessTile getChessTile(final int tileCoordinate) {
         return gameBoard.get(tileCoordinate);
     }
 
+    // using the toString method to temporarily print out the look of our game Board
+    @Override
+    public String toString() {
+        final StringBuilder builder = new StringBuilder();
+
+        for(int i=0; i<BoardUtils.NUMBER_OF_TILES; i++) {
+            final String tileText = this.gameBoard.get(i).toString();
+            builder.append(String.format("%3s", tileText));
+
+            if((i+1) % BoardUtils.NUMBER_OF_TILES_PER_ROW == 0) {
+                builder.append("\n");
+            }
+        }
+        return builder.toString();
+    }
+
+    // method for creating unmodifiable Board for the chess game
     private static List<ChessTile> createGameBoard(final Builder builder) {
         final ChessTile[] chessTiles = new ChessTile[BoardUtils.NUMBER_OF_TILES];
         for(int i=0; i<BoardUtils.NUMBER_OF_TILES; i++) {
@@ -34,7 +52,18 @@ public class Board {
         return ImmutableList.copyOf(chessTiles);
     }
 
-    private Collection<Piece> calculateActivePieces(final List<ChessTile> gameBoard, final Alliance alliance) {
+    // calculating all possible legal moves for pieces on Board (depending on alliance)
+    private Collection<Move> calculateLegalMoves(final Collection<Piece> pieces) {
+        final List<Move> legalMoves = new ArrayList<>();
+
+        for(final Piece piece : pieces) {
+            legalMoves.addAll(piece.calculateLegalMoves(this));
+        }
+        return ImmutableList.copyOf(legalMoves);
+    }
+
+    // calculating all active playing pieces on Board (depending on alliance)
+    private static Collection<Piece> calculateActivePieces(final List<ChessTile> gameBoard, final Alliance alliance) {
         final List<Piece> activePieces = new ArrayList<>();
 
         for(final ChessTile tile : gameBoard) {
@@ -48,6 +77,7 @@ public class Board {
         return ImmutableList.copyOf(activePieces);
     }
 
+    // method for initialization the start-up arrangement for pieces on Board
     public static Board createInitialBoard() {
         final Builder builder = new Builder();
         // setting initial Piece configuration for Black layout
@@ -98,6 +128,7 @@ public class Board {
         private Alliance nextMoveMaker;
 
         public Builder() {
+            this.boardConfiguration = new HashMap<>();
         }
 
         public Builder setPiece(final Piece piece) {

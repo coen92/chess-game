@@ -22,6 +22,11 @@ public class King extends Piece {
     }
 
     @Override
+    public String toString() {
+        return PieceType.KING.toString();
+    }
+
+    @Override
     public Collection<Move> calculateLegalMoves(final Board board) {
         final List<Move> legalMoves = new ArrayList<>();
 

@@ -8,6 +8,12 @@ public class EmptyTile extends ChessTile {
         super(coordinate);
     }
 
+    // if the ChessTile is empty it will be printed out in console as dash "-"
+    @Override
+    public String toString() {
+        return "-";
+    }
+
     @Override
     public boolean isTileOccupied() {
         return false;
