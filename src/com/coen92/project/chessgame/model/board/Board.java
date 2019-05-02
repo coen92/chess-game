@@ -1,6 +1,8 @@
 package com.coen92.project.chessgame.model.board;
 
 import com.coen92.project.chessgame.model.pieces.*;
+import com.coen92.project.chessgame.model.player.BlackPlayer;
+import com.coen92.project.chessgame.model.player.WhitePlayer;
 import com.coen92.project.chessgame.model.rules.Alliance;
 import com.coen92.project.chessgame.model.rules.Move;
 import com.coen92.project.chessgame.model.utils.BoardUtils;
@@ -14,6 +16,9 @@ public class Board {
     private final Collection<Piece> whitePieces;
     private final Collection<Piece> blackPieces;
 
+    private final WhitePlayer whitePlayer;
+    private final BlackPlayer blackPlayer;
+
     private Board(Builder builder) {
         this.gameBoard = createGameBoard(builder);
         this.whitePieces = calculateActivePieces(this.gameBoard, Alliance.WHITE);
@@ -21,10 +26,21 @@ public class Board {
 
         final Collection<Move> whiteStandardLegalMoves = calculateLegalMoves(this.whitePieces);
         final Collection<Move> blackStandardLegalMoves = calculateLegalMoves(this.blackPieces);
+
+        this.whitePlayer = new WhitePlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
+        this.blackPlayer = new BlackPlayer(this, blackStandardLegalMoves, whiteStandardLegalMoves);
     }
 
     public ChessTile getChessTile(final int tileCoordinate) {
         return gameBoard.get(tileCoordinate);
+    }
+
+    public Collection<Piece> getBlackPieces() {
+        return this.blackPieces;
+    }
+
+    public Collection<Piece> getWhitePieces() {
+        return this.whitePieces;
     }
 
     // using the toString method to temporarily print out the look of our game Board
