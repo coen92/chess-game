@@ -2,6 +2,7 @@ package com.coen92.project.chessgame.model.player;
 
 import com.coen92.project.chessgame.model.board.Board;
 import com.coen92.project.chessgame.model.pieces.Piece;
+import com.coen92.project.chessgame.model.rules.Alliance;
 import com.coen92.project.chessgame.model.rules.Move;
 
 import java.util.Collection;
@@ -15,5 +16,15 @@ public class BlackPlayer extends Player {
     @Override
     public Collection<Piece> getActivePieces() {
         return this.board.getBlackPieces();
+    }
+
+    @Override
+    public Alliance getAlliance() {
+        return Alliance.BLACK;
+    }
+
+    @Override
+    public Player getOpponent() {
+        return this.board.getWhitePlayer();
     }
 }

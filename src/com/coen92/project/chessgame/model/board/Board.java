@@ -2,6 +2,7 @@ package com.coen92.project.chessgame.model.board;
 
 import com.coen92.project.chessgame.model.pieces.*;
 import com.coen92.project.chessgame.model.player.BlackPlayer;
+import com.coen92.project.chessgame.model.player.Player;
 import com.coen92.project.chessgame.model.player.WhitePlayer;
 import com.coen92.project.chessgame.model.rules.Alliance;
 import com.coen92.project.chessgame.model.rules.Move;
@@ -57,6 +58,14 @@ public class Board {
             }
         }
         return builder.toString();
+    }
+
+    public Player getWhitePlayer() {
+        return whitePlayer;
+    }
+
+    public Player getBlackPlayer() {
+        return blackPlayer;
     }
 
     // method for creating unmodifiable Board for the chess game
