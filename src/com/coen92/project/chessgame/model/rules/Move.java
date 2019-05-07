@@ -19,6 +19,11 @@ public abstract class Move {
         return this.destinationCoordinate;
     }
 
+    public Piece getMovedPiece() {
+        return movedPiece;
+    }
+
+    //this abstract execute method is going to prepare execution of new Board - this for itself doesn't change anything
     public abstract Board execute();
 
     public static final class MajorMove extends Move {
@@ -29,7 +34,24 @@ public abstract class Move {
 
         @Override
         public Board execute() {
-            return null;
+            final Board.Builder builder = new Board.Builder();
+            //copying every Piece position at current Board for Pieces that don't make a move for a Player
+            for(final Piece piece : this.board.currentPlayer().getActivePieces()) {
+                //Todo: hashCode and equals for pieces - very important
+                if(!this.movedPiece.equals(piece)) {
+                    builder.setPiece(piece);
+                }
+            }
+            //copying every Piece position at current Board for Pieces that don't make a move for a Opponent
+            for(final Piece piece : this.board.currentPlayer().getOpponent().getActivePieces()) {
+                builder.setPiece(piece);
+            }
+            //moving the Piece that is trying to make a move and setting it position to new Board
+            builder.setPiece(this.movedPiece.movePiece(this));
+            //after the Piece made movement we need to set next move maker for an Opponent Alliance
+            builder.setMoveMaker(this.board.currentPlayer().getOpponent().getAlliance());
+
+            return builder.build();
         }
     }
 

@@ -38,6 +38,8 @@ public abstract class Piece {
     }
 
     public abstract Collection<Move> calculateLegalMoves(final Board board);
+    //method for creating new Piece in when moving the old one to the legal move position
+    public abstract Piece movePiece(final Move move);
 
     // creating enum for declaration of piece names for each piece type for printing it out in console
     public enum PieceType {
