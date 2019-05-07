@@ -17,6 +17,7 @@ public class Board {
     private final Collection<Piece> whitePieces;
     private final Collection<Piece> blackPieces;
 
+    private final Player currentPlayer;
     private final WhitePlayer whitePlayer;
     private final BlackPlayer blackPlayer;
 
@@ -28,6 +29,7 @@ public class Board {
         final Collection<Move> whiteStandardLegalMoves = calculateLegalMoves(this.whitePieces);
         final Collection<Move> blackStandardLegalMoves = calculateLegalMoves(this.blackPieces);
 
+        this.currentPlayer = null;
         this.whitePlayer = new WhitePlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
         this.blackPlayer = new BlackPlayer(this, blackStandardLegalMoves, whiteStandardLegalMoves);
     }
@@ -58,6 +60,10 @@ public class Board {
             }
         }
         return builder.toString();
+    }
+
+    public Player currentPlayer() {
+        return currentPlayer;
     }
 
     public Player getWhitePlayer() {
