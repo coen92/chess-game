@@ -12,6 +12,7 @@ public abstract class Piece {
     private final int piecePosition;
     private final Alliance pieceAlliance;
     protected final boolean isFirstMove;
+    private final int cachedHashCode;
 
     protected Piece(final PieceType pieceType, final int piecePosition, final Alliance pieceAlliance) {
         this.pieceType = pieceType;
@@ -19,6 +20,7 @@ public abstract class Piece {
         this.pieceAlliance = pieceAlliance;
         // Todo: more work here!!
         this.isFirstMove = false;
+        this.cachedHashCode = getCachedHashCode();
     }
 
     public PieceType getPieceType() {
@@ -35,6 +37,33 @@ public abstract class Piece {
 
     public boolean isFirstMove() {
         return isFirstMove;
+    }
+
+    public int getCachedHashCode() {
+        int result = pieceType.hashCode();
+        result = 31 * result + pieceAlliance.hashCode();
+        result = 31 * result + piecePosition;
+        result = 31 * result + (isFirstMove ? 1 : 0);
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.cachedHashCode;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj) {
+            return true;
+        }
+        if(!(obj instanceof Piece)) {
+            return false;
+        }
+        final Piece objPiece = (Piece) obj;
+        return piecePosition == objPiece.getPiecePosition() && pieceType == objPiece.getPieceType()
+                && pieceAlliance == objPiece.getPieceAlliance() && isFirstMove == objPiece.isFirstMove();
+
     }
 
     public abstract Collection<Move> calculateLegalMoves(final Board board);

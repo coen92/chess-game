@@ -36,7 +36,7 @@ public class Pawn extends Piece {
             }
             // setting normal move for Pawn
             if(currentCandidateOffset == 8 && !board.getChessTile(candidateDestinationCoordinate).isTileOccupied()) {
-                legalMoves.add(new Move.UponMove(board, this, candidateDestinationCoordinate));
+                legalMoves.add(new Move.PawnMove(board, this, candidateDestinationCoordinate));
             }
             // setting optional jump for Pawn if it's first move of it and destination tile is not occupied
             else if (currentCandidateOffset == 16 && this.isFirstMove()
@@ -46,7 +46,7 @@ public class Pawn extends Piece {
 
                 if(!board.getChessTile(behindCandidateDestinationCoordinate).isTileOccupied()
                         && !board.getChessTile(candidateDestinationCoordinate).isTileOccupied()) {
-                    legalMoves.add(new Move.UponMove(board, this, candidateDestinationCoordinate));
+                    legalMoves.add(new Move.PawnMove(board, this, candidateDestinationCoordinate));
                 }
             }
             // setting one option for attacking move - when Pawn attacks Piece which is in front-right Tile
