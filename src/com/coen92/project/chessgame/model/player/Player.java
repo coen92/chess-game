@@ -85,7 +85,7 @@ public abstract class Player {
     }
 
     //method for returning the possible opponent attack moves
-    private static Collection<Move> calculateAttacksOnTile(final int piecePosition, final Collection<Move> opponentMoves) {
+    protected static Collection<Move> calculateAttacksOnTile(final int piecePosition, final Collection<Move> opponentMoves) {
         final List<Move> attackMoves = new ArrayList<>();
 
         for(final Move move : opponentMoves) {
@@ -110,4 +110,5 @@ public abstract class Player {
     public abstract Collection<Piece> getActivePieces();
     public abstract Alliance getAlliance();
     public abstract Player getOpponent();
+    protected abstract Collection<Move> calculateKingCastles(Collection<Move> playerLegals, Collection<Move> opponentsLegals);
 }

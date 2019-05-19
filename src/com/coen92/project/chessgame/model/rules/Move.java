@@ -1,7 +1,9 @@
 package com.coen92.project.chessgame.model.rules;
 
 import com.coen92.project.chessgame.model.board.Board;
+import com.coen92.project.chessgame.model.pieces.Pawn;
 import com.coen92.project.chessgame.model.pieces.Piece;
+import com.coen92.project.chessgame.model.pieces.Rook;
 
 public abstract class Move {
 
@@ -53,11 +55,11 @@ public abstract class Move {
                 && getMovedPiece().equals(objMove.getMovedPiece());
     }
 
+    //Todo: Change the execute() method in superclass to avoid code duplications in subclasses
     public Board execute() {
         final Board.Builder builder = new Board.Builder();
         //copying every Piece position at current Board for Pieces that don't make a move for a Player
         for(final Piece piece : this.board.currentPlayer().getActivePieces()) {
-            //Todo: hashCode and equals for pieces - very important
             if(!this.movedPiece.equals(piece)) {
                 builder.setPiece(piece);
             }
@@ -134,14 +136,12 @@ public abstract class Move {
         }
     }
 
-    /* -------- THIS CLASS IS TEMPORARY ------ */
-    //Todo: update body of the method for PawnMove
+    //Todo: update body for PawnMove
     public static final class PawnMove extends Move {
         public PawnMove(Board board, Piece movedPiece, int destinationCoordinate) {
             super(board, movedPiece, destinationCoordinate);
         }
     }
-    /* --------------------------------------- */
     public static class PawnAttackMove extends AttackMove {
         public PawnAttackMove(Board board, Piece movedPiece, int destinationCoordinate, Piece attackedPiece) {
             super(board, movedPiece, destinationCoordinate, attackedPiece);
@@ -152,6 +152,25 @@ public abstract class Move {
         public PawnEnPassantAttackMove(Board board, Piece movedPiece, int destinationCoordinate, Piece attackedPiece) {
             super(board, movedPiece, destinationCoordinate, attackedPiece);
         }
+
+        @Override
+        public Board execute() {
+            final Board.Builder builder = new Board.Builder();
+
+            for(final Piece piece : this.board.currentPlayer().getActivePieces()) {
+                if(!this.movedPiece.equals(piece)) {
+                    builder.setPiece(piece);
+                }
+            }
+            for(final Piece piece : this.board.currentPlayer().getOpponent().getActivePieces()) {
+                builder.setPiece(piece);
+            }
+            final Pawn movedPawn = (Pawn)this.movedPiece.movePiece(this);
+            builder.setPiece(movedPawn);
+            builder.setEnPassantPawn(movedPawn);
+            builder.setMoveMaker(this.board.currentPlayer().getOpponent().getAlliance());
+            return builder.build();
+        }
     }
 
     public static final class PawnJump extends Move {
@@ -161,20 +180,78 @@ public abstract class Move {
     }
 
     static abstract class CastleMove extends Move {
-        public CastleMove(Board board, Piece movedPiece, int destinationCoordinate) {
+
+        protected final Rook castleRook;
+        protected final int castleRookStart;
+        protected final int castleRookDestination;
+
+        public CastleMove(final Board board, final Piece movedPiece, final int destinationCoordinate, final Rook castleRook,
+                          final int castleRookStart, final int castleRookDestination) {
             super(board, movedPiece, destinationCoordinate);
+            this.castleRook = castleRook;
+            this.castleRookStart = castleRookStart;
+            this.castleRookDestination = castleRookDestination;
+        }
+
+        public Rook getCastleRook() {
+            return castleRook;
+        }
+
+        public int getCastleRookStart() {
+            return castleRookStart;
+        }
+
+        public int getCastleRookDestination() {
+            return castleRookDestination;
+        }
+
+        @Override
+        public boolean isCastlingMove() {
+            return super.isCastlingMove();
+        }
+
+        @Override
+        public Board execute() {
+            final Board.Builder builder = new Board.Builder();
+
+            for(final Piece piece : this.board.currentPlayer().getActivePieces()) {
+                if(!this.movedPiece.equals(piece) && !this.castleRook.equals(piece)) {
+                    builder.setPiece(piece);
+                }
+            }
+            for(final Piece piece : this.board.currentPlayer().getOpponent().getActivePieces()) {
+                builder.setPiece(piece);
+            }
+            builder.setPiece(this.movedPiece.movePiece(this));
+            builder.setPiece(new Rook(this.castleRookDestination, this.castleRook.getPieceAlliance()));
+            builder.setMoveMaker(this.board.currentPlayer().getOpponent().getAlliance());
+            return builder.build();
         }
     }
 
     public static final class KingSideCastleMove extends CastleMove {
-        public KingSideCastleMove(Board board, Piece movedPiece, int destinationCoordinate) {
-            super(board, movedPiece, destinationCoordinate);
+        public KingSideCastleMove(Board board, Piece movedPiece, int destinationCoordinate,
+                                  Rook castleRook, int castleRookStart, int castleRookDestination) {
+            super(board, movedPiece, destinationCoordinate,
+                    castleRook, castleRookStart, castleRookDestination);
+        }
+
+        @Override
+        public String toString() {
+            return "0-0";
         }
     }
 
     public static final class QueenSideCastleMove extends CastleMove {
-        public QueenSideCastleMove(Board board, Piece movedPiece, int destinationCoordinate) {
-            super(board, movedPiece, destinationCoordinate);
+        public QueenSideCastleMove(Board board, Piece movedPiece, int destinationCoordinate,
+                                   Rook castleRook, int castleRookStart, int castleRookDestination) {
+            super(board, movedPiece, destinationCoordinate,
+                    castleRook, castleRookStart, castleRookDestination);
+        }
+
+        @Override
+        public String toString() {
+            return "0-0-0";
         }
     }
 

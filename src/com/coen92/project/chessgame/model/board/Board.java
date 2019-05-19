@@ -163,6 +163,7 @@ public class Board {
 
         private Map<Integer, Piece> boardConfiguration;
         private Alliance nextMoveMaker;
+        private Piece enPassantPawn;
 
         public Builder() {
             this.boardConfiguration = new HashMap<>();
@@ -178,11 +179,15 @@ public class Board {
             return this;
         }
 
+        public Builder setEnPassantPawn(Pawn movedPawn) {
+            this.enPassantPawn = movedPawn;
+            return this;
+        }
+
         //method for creating immutable Board based on our Builder class
         public Board build() {
             return new Board(this);
         }
-
     }
 
 
